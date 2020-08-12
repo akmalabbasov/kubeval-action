@@ -4,36 +4,35 @@ author: "Gareth Rushgrove"
 branding:
   icon: "check"
   color: "green"
-inputs: 
-  files:
-    description: "Files or directories to validate"
+inputs:
+  directories:
+    description: "A comma-separated list of directories to recursively search for YAML documents"
     default: "."
-  output:
-    description: "Output format for results"
-    default: "stdout"
-  version:
+  ignore_missing_schemas:
+    description: "Skip validation for resource definitions without a schema"
+    default: true
+  ignored_filename_patterns:
+    description: "A comma-separated list of regular expressions specifying filenames to ignore"
+  kubernetes_version:
     description: "Version of Kubernetes to validate against"
     default: "master"
-  strict:
-    description: "Whether to not to check for extra properties" 
-    default: true
   openshift:
-    description: "Whether to use the schemas from OpenShift rather than Kubernetes" 
+    description: "Whether to use the schemas from OpenShift rather than Kubernetes"
     default: false
-  ignore_missing_schemas:
-    description: "Whether or not to skip custom resources" 
+  output:
+    description: "The format of the output of this script. Options are: [stdout json tap]"
+    default: "stdout"
+  strict:
+    description: "Disallow additional properties not in schema"
     default: true
 runs:
   using: 'docker'
-  image: 'docker://garethr/kubeval:latest'
+  image: './Dockerfile'
   args:
-  - -d
-  - ${{ inputs.files }} 
-  - -o
-  - ${{ inputs.output }}
-  - --strict=${{ inputs.strict }}
-  - --kubernetes-version
-  - ${{ inputs.version }}
-  - --openshift=${{ inputs.openshift }}
+  - --directories=${{ inputs.directories }}
   - --ignore-missing-schemas=${{ inputs.ignore_missing_schemas }}
-
+  - --ignored-filename-patterns=${{ inputs.ignored_filename_patterns }}
+  - --kubernetes-version=${{ inputs.kubernetes_version }}
+  - --openshift=${{ inputs.openshift }}
+  - --output=${{ inputs.output }}
+  - --strict=${{ inputs.strict }}

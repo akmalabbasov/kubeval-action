@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: test
-      uses: instrumenta/kubeval-action@master
+      uses: akmalabbasov/kubeval-action@master
 ```
 
 By default the action will recursively scan for YAML files and validate them as Kubernetes obejcts. You can configure this with the parameters.
@@ -23,10 +23,10 @@ passed to the action using `with`.
 
 | Property | Default | Description |
 | --- | --- | --- |
-| files | . | Which files or directories to validate |
-| output | stdout | How to format the output from Conftest (stdout, json or tap) |
-| openshift | false | Whether or not to use the OpenShift schemas rather than the upstread Kubernetes ones |
-| strict | true | Whether ot not to fail for additional properties in objects |
-| ignore_missing_schemas | true | Whether to fail if unknown resources are found |
-| version | master | Which version of Kubernetes to validate against |
-
+| directories | . | A comma-separated list of directories to recursively search for YAML documents |
+| ignore_missing_schemas | true | Skip validation for resource definitions without a schema |
+| ignored_filename_patterns | "" | A comma-separated list of regular expressions specifying filenames to ignore |
+| kubernetes_version | master | Version of Kubernetes to validate against |
+| openshift | false | Whether to use the schemas from OpenShift rather than Kubernetes |
+| output | stdout | The format of the output of this script. Options are: [stdout json tap] |
+| strict | true | Disallow additional properties not in schema |
